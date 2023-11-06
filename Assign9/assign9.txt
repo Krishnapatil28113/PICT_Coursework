@@ -1,0 +1,27 @@
+use movie;
+
+db.createCollection("MovieReview");
+
+db.MovieReview.insertMany([
+    {title: "Interstellar" , rating: 10 , review: "What on Earth" , actors: ["Mathew Mckuchbhi" , "Anne Hathway"] , director: "Lord Christopher Nolan"},
+    {title: "Inception" , rating: 9.5 , review: "What on Earth returns" , actors: ["Leonardo Di Caprio" , "Tom Hardy"] , director: "Lord Christopher Nolan"},
+    {title: "Prestige" , rating: 10 , review: "What on Earth part 3" , actors: ["Batman" , "Wolverine"] , director: "Lord Christopher Nolan"}
+]);
+
+db.MovieReview.find().pretty();
+
+db.MovieReview.updateOne({title: "Inception"} , {$set: {rating: 9.6}});
+
+db.MovieReview.updateMany([
+    {title: "Interstellar"} , {$inc: {rating: -0.2}},
+    {title: "Inception"} , {$inc: {rating: +0.2}},
+    {title: "Prestige"} , {$inc: {rating: -0.4}}
+]);
+
+db.MovieReview.updateOne({title: "Interstellar"} , {$set: {rating: 0.2}});
+
+db.MovieReview.deleteOne({title: "Prestige"});
+
+db.MovieReview.find({rating: {$lt: 9.8}});
+
+db.updateOne({rating: {$lt: 9.8} , {$set: {title: "The Pursuit Of Happiness"}}});

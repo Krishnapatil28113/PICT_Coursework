@@ -1,0 +1,38 @@
+db.shop.insertMany([
+    {cust_id: 1,amount: 300,mode: "online"},
+    {cust_id: 2,amount: 450,mode: "offline"},
+    {cust_id: 3,amount: 600,mode: "online"},
+]);
+
+var mapFunction = function(){emit(this.cust_id , this.amount)};
+
+var reduceFunction = function(key,values){return Array.sum(values)};
+
+db.shop.mapReduce(
+    mapFunction,
+    reduceFunction,
+    {out: "Order_Totals"}
+);
+
+db.shop.mapReduce(
+    mapFunction,
+    mapReduce,
+    {
+        query: {mode: "online"},
+        out: "Order_Totals"
+    }
+);
+
+var map = function(){emit(this.cust_id,this.amount)};
+
+var reduce = function(key,values) {return Array.avg(values)};
+
+db.shop.mapReduce(
+    map,
+    reduce,
+    {
+        query: {mode: "online"},
+        out: "Order_Totals"
+    }
+);
+
