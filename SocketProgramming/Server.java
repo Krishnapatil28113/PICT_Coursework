@@ -1,63 +1,53 @@
 package SocketProgramming;
 
-import java.io.*;
-import java.util.*;
 import java.net.*;
-// import java.io.BufferedReader;
-// import java.io.IOException;
-// import java.io.PrintWriter;
-// import java.net.ServerSocket;
-// import java.net.Socket;
-// import java.util.Scanner;
+import java.io.*;
 
 class RequestHandler extends Thread {
-    Socket sock;
     PrintWriter out;
     BufferedReader in;
+    Socket sock;
 
     public RequestHandler(Socket s) {
-        try{
+        try {
             sock = s;
-            out = new PrintWriter(sock.getOutputStream(),true);
+            out = new PrintWriter(sock.getOutputStream(), true);
             in = new BufferedReader(new InputStreamReader(sock.getInputStream()));
-
-        } catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     public void run() {
-        try{
-            String clientmessage;
+        try {
+            String clientMessage;
+            while ((clientMessage = in.readLine()) != null) {
+                System.out.println("Client: " + clientMessage);
 
-            while((clientmessage = in.readLine()) != null) {
-                System.out.println("Client: " + clientmessage);
+                // Process client's message if needed
 
-                System.out.println("Reply: ");
+                System.out.print("Reply: ");
                 BufferedReader temp = new BufferedReader(new InputStreamReader(System.in));
-                String reply;
-                reply = temp.readLine();
-
+                String reply = temp.readLine();
                 out.println(reply);
             }
-
             out.close();
             sock.close();
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 }
 
-
 public class Server {
-    public static void main(String args[]) {
-        try(ServerSocket serversock = new ServerSocket(21)) {
-            Socket sock = serversock.accept();
-            Thread newConvo = new RequestHandler(sock);
-            newConvo.start();
-        }
-        catch(IOException e) {
+    public static void main(String[] args) {
+        try (ServerSocket serverSocket = new ServerSocket(8888)) {
+            while (true) {
+                Socket sock = serverSocket.accept();
+                Thread newConvo = new RequestHandler(sock);
+                newConvo.start();
+            }
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
