@@ -24,8 +24,6 @@ class RequestHandler extends Thread {
             while ((clientMessage = in.readLine()) != null) {
                 System.out.println("Client: " + clientMessage);
 
-                // Process client's message if needed
-
                 System.out.print("Reply: ");
                 BufferedReader temp = new BufferedReader(new InputStreamReader(System.in));
                 String reply = temp.readLine();

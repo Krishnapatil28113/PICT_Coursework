@@ -16,8 +16,6 @@ public class Client {
                 out.println(userInput);
                 System.out.println("Server: " + in.readLine());
 
-                // Optionally handle server's response
-
                 System.out.print("Reply: ");
             }
 
